@@ -5,4 +5,6 @@ test("colorDistanceLAB", () => {
   const rgb2 = newRGB("ffffff");
   const dis = colorDistanceLAB(rgb1, rgb2);
   expect(dis).toBe(0);
+
+  expect(() => newRGB("zzzzzz")).toThrow();
 });
