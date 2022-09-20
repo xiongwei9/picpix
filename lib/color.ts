@@ -39,4 +39,18 @@ function colorDistanceLAB(rgb1: RGB, rgb2: RGB): number {
   return Math.sqrt((2 + rmean / 256) * r ** 2 + 4 * g ** 2 + (2 + (255 - rmean) / 256) * b ** 2);
 }
 
+/**
+ * 提取主题色
+ * - Google算法：https://blog.csdn.net/rxie1/article/details/107635489、https://www.jianshu.com/p/a67a6d1b1844
+ * - 算法介绍：https://www.zhihu.com/question/430895335
+ * - 主题色算法介绍：https://blog.csdn.net/shanglianlm/article/details/50051269、https://blog.csdn.net/qq_37340753/article/details/121140533
+ */
+function getThemeColor(rgbArr: RGB[]): RGB {
+  return {
+    R: 0,
+    G: 0,
+    B: 0,
+  };
+}
+
 export { RGB, newRGB, colorDistanceLAB };
