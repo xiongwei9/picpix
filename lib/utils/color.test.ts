@@ -1,4 +1,13 @@
-import { colorDistanceLAB, newRGB } from "./color";
+import { getColor, colorDistanceLAB, newRGB } from "./color";
+
+test("getColor", async () => {
+  const color = await getColor("asset/bg.png");
+  expect(color).toEqual({
+    R: 73,
+    G: 61,
+    B: 75,
+  });
+});
 
 test("colorDistanceLAB", () => {
   const rgb1 = newRGB("ffffff");

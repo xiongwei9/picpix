@@ -1,20 +1,5 @@
-import getPixels from "get-pixels";
+import { getPixels } from "./utils/pix";
 import { NdArray } from "ndarray";
-
-/**
- * 读取png/jpg图片文件为二进制
- */
-function getPixelsPromise(path: string): Promise<NdArray<Uint8Array>> {
-  return new Promise((res, rej) => {
-    getPixels(path, (err, pixels) => {
-      if (err) {
-        rej(err);
-        return;
-      }
-      res(pixels);
-    });
-  });
-}
 
 // /**
 //  * 图片格式
@@ -40,7 +25,7 @@ interface Pic2dOptions {
 
 async function pic2d(path: string, options?: Pic2dOptions) {
   // 读取图片文件
-  let pixels = await getPixelsPromise(path);
+  let pixels = await getPixels(path);
   // 按用户指定宽高压缩，减轻后续计算压力
   pixels = compress(pixels, options?.width || 100, options?.height || 100);
 
@@ -49,4 +34,4 @@ async function pic2d(path: string, options?: Pic2dOptions) {
   // for ()
 }
 
-export { getPixelsPromise, pic2d };
+export { pic2d };
