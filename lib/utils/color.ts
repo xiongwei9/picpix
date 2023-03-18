@@ -24,12 +24,28 @@ import ColorThief from "colorthief";
  */
 async function getColor(image: string, quality = 10): Promise<RGB> {
   // return colorThief.getColor(image, quality)
-  const color = await ColorThief.getColor(image, quality);
+  const color: [number, number, number] = await ColorThief.getColor(image, quality);
   return {
     R: color[0],
     G: color[1],
     B: color[2],
   };
+}
+
+/**
+ * 提取调色板
+ * @param image
+ * @param colorCount
+ * @param quality
+ * @returns
+ */
+async function getPalette(image: string, colorCount = 10, quality = 10): Promise<Array<RGB>> {
+  const colors: Array<[number, number, number]> = await ColorThief.getPalette(image, colorCount, quality);
+  return colors.map((color) => ({
+    R: color[0],
+    G: color[1],
+    B: color[2],
+  }));
 }
 
 interface RGB {
@@ -62,7 +78,7 @@ function newRGB(color: string): RGB {
  * - https://www.compuphase.com/cmetric.htm
  * - https://blog.csdn.net/qq_16564093/article/details/80698479
  */
-function colorDistanceLAB(rgb1: RGB, rgb2: RGB): number {
+function colorDistance(rgb1: RGB, rgb2: RGB): number {
   const rmean = (rgb1.R + rgb2.R) / 2;
   const r = rgb1.R - rgb2.R;
   const g = rgb1.G - rgb2.G;
@@ -71,4 +87,23 @@ function colorDistanceLAB(rgb1: RGB, rgb2: RGB): number {
   return Math.sqrt((2 + rmean / 256) * r ** 2 + 4 * g ** 2 + (2 + (255 - rmean) / 256) * b ** 2);
 }
 
-export { getColor, colorDistanceLAB, newRGB, RGB };
+/**
+ * 计算最接近的颜色值
+ * @param color
+ * @param colorList
+ * @returns
+ */
+function nearestColor(color: RGB, colorList: Array<RGB>): RGB {
+  let dist = color;
+  let distance = Number.MAX_SAFE_INTEGER;
+  for (const c of colorList) {
+    const d = colorDistance(c, color);
+    if (d < distance) {
+      dist = c;
+      distance = d;
+    }
+  }
+  return dist;
+}
+
+export { getColor, getPalette, colorDistance, nearestColor, newRGB, RGB };
